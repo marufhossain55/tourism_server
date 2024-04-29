@@ -25,14 +25,31 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    usersCollection = client.db('tourismSpotsDB').collection('tourismSpots');
+    tourismCollection = client.db('tourismSpotsDB').collection('tourismSpots');
 
-    ///////////////////////////////////////////////////////////
-    app;
-    /////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////
+
+    app.get('/myList/:email', async (req, res) => {
+      console.log(req.params.email);
+      const result = await tourismCollection
+        .find({ email: req.params.email })
+        .toArray();
+      res.send(result);
+      console.log(result);
+    });
+    ///////////////////////data add////////////////////////////////
+    app.post('/addTouristsSpot', async (req, res) => {
+      const request = req.body;
+      console.log(request);
+      const result = await tourismCollection.insertOne(request);
+      console.log(result);
+      res.send(result);
+    });
+
+    ////////////////data show/////////////////////
 
     app.get('/touristsSpots', async (req, res) => {
-      const cursor = usersCollection.find();
+      const cursor = tourismCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
