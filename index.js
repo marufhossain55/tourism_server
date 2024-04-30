@@ -27,6 +27,13 @@ async function run() {
 
     tourismCollection = client.db('tourismSpotsDB').collection('tourismSpots');
 
+    //------------------delete----------------->
+    app.delete('/delete/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await tourismCollection.deleteOne(query);
+      res.send(result);
+    });
     //----------------------data update------------>
     app.get('/updateTouristSpot/:id', async (req, res) => {
       const id = req.params.id;
