@@ -26,6 +26,7 @@ async function run() {
     await client.connect();
 
     tourismCollection = client.db('tourismSpotsDB').collection('tourismSpots');
+    tourismCollection1 = client.db('tourismSpotsDB').collection('countries');
 
     //------------------delete----------------->
     app.delete('/delete/:id', async (req, res) => {
@@ -49,7 +50,7 @@ async function run() {
       console.log(req.body);
       const data = {
         $set: {
-          country_Name: req.body.country_Name,
+          country_name: req.body.country_name,
           tourists_spot_name: req.body.tourists_spot_name,
           location: req.body.location,
           short_description: req.body.short_description,
@@ -80,6 +81,13 @@ async function run() {
       // console.log(request);
       const result = await tourismCollection.insertOne(request);
       // console.log(result);
+      res.send(result);
+    });
+
+    ////////////show data countries/////////////////
+    app.get('/countries', async (req, res) => {
+      const cursor = tourismCollection1.find();
+      const result = await cursor.toArray();
       res.send(result);
     });
 
