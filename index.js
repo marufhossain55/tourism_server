@@ -25,9 +25,20 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    tourismCollection = client.db('tourismSpotsDB').collection('tourismSpots');
-    tourismCollection1 = client.db('tourismSpotsDB').collection('countries');
+    const tourismCollection = client
+      .db('tourismSpotsDB')
+      .collection('tourismSpots');
+    const tourismCollection1 = client
+      .db('tourismSpotsDB')
+      .collection('countries');
 
+    //--------------------------country---------->
+    app.get('/sortByCountry/:country_name', async (req, res) => {
+      const result = await tourismCollection
+        .find({ country_name: req.params.country_name })
+        .toArray();
+      res.send(result);
+    });
     //------------------delete----------------->
     app.delete('/delete/:id', async (req, res) => {
       const id = req.params.id;
@@ -96,6 +107,14 @@ async function run() {
     app.get('/touristsSpots', async (req, res) => {
       const cursor = tourismCollection.find();
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get('/touristsSpots/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await tourismCollection.findOne(query);
+
       res.send(result);
     });
     /////////////////////////////////////////////
