@@ -30,27 +30,49 @@ async function run() {
     //----------------------data update------------>
     app.get('/updateTouristSpot/:id', async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+      // console.log(id);
       const result = await tourismCollection.findOne({ _id: new ObjectId(id) });
       res.send(result);
+      // console.log(result);
+    });
+
+    app.put('/updateTouristSpot/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      console.log(req.body);
+      const data = {
+        $set: {
+          country_Name: req.body.country_Name,
+          tourists_spot_name: req.body.tourists_spot_name,
+          location: req.body.location,
+          short_description: req.body.short_description,
+          average_cost: req.body.average_cost,
+          seasonality: req.body.seasonality,
+          travel_time: req.body.travel_time,
+          totalVisitorsPerYear: req.body.totalVisitorsPerYear,
+          imageURL: req.body.imageURL,
+        },
+      };
+      const result = await tourismCollection.updateOne(query, data);
       console.log(result);
+      res.send(result);
     });
     ///////////////////////////////////////////////////////////////
 
     app.get('/myList/:email', async (req, res) => {
-      console.log(req.params.email);
+      // console.log(req.params.email);
       const result = await tourismCollection
         .find({ email: req.params.email })
         .toArray();
       res.send(result);
-      console.log(result);
+      // console.log(result);
     });
     ///////////////////////data add////////////////////////////////
     app.post('/addTouristsSpot', async (req, res) => {
       const request = req.body;
-      console.log(request);
+      // console.log(request);
       const result = await tourismCollection.insertOne(request);
-      console.log(result);
+      // console.log(result);
       res.send(result);
     });
 
